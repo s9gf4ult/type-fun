@@ -1,4 +1,5 @@
 module TypeFun.Data.Eq where
 
-class Equality a b
-instance Equality a a
+type family Equal (a :: k) (b :: k) :: Bool where
+  Equal a a = 'True
+  Equal a b = 'False

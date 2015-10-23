@@ -22,12 +22,17 @@ prefixConstr p = sublistConstr p + 1
 indexConstr :: (('Just 0) ~ (IndexOf Int l)) => proxy l -> Int
 indexConstr p = elemConstr p + 1
 
+uniqConstr :: (UniqElements l) => proxy l -> Int
+uniqConstr _ = 1
+
 main :: IO ()
 main = do
   let
     p2 = Proxy :: Proxy '[Int, Bool]
-    p3 = Proxy :: Proxy '[Int, Bool, String]
+    p3 = Proxy :: Proxy '[Int, Bool, Int]
   print $ indexConstr p2
   print $ sublistConstr p2
   print $ prefixConstr p2
   print $ prefixConstr p3
+  print $ uniqConstr p2
+  -- print $ uniqConstr p3 -- < ElementIsNotUniqInList Int '[Int, Bool, Int]
