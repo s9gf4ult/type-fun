@@ -8,7 +8,7 @@ import Data.Type.Bool
 import GHC.Exts
 import GHC.TypeLits
 import TypeFun.Data.Eq
-import TypeFun.Data.List.Internal
+import TypeFun.Data.List.Errors
 import TypeFun.Data.Maybe
 
 type family Length (a :: [k]) :: Nat where

@@ -1,4 +1,4 @@
-module TypeFun.Data.List.Internal where
+module TypeFun.Data.List.Errors where
 
 class ElementNotFoundInList a s
 
