@@ -10,10 +10,11 @@ import GHC.TypeLits
 import TypeFun.Data.Eq
 import TypeFun.Data.List.Errors
 import TypeFun.Data.Maybe
+import TypeFun.Data.Peano
 
-type family Length (a :: [k]) :: Nat where
-  Length '[] = 0
-  Length (a ': as) = 1 + (Length as)
+type family Length (a :: [k]) :: N where
+  Length '[] = 'Z
+  Length (a ': as) = 'S (Length as)
 
 -- | Generates unresolvable constraint if fists element is not
 -- contained inside of second
@@ -34,12 +35,17 @@ type family NotSubList (a :: [k]) (b :: [k]) :: Constraint where
   NotSubList '[]       bs = ()
   NotSubList (a ': as) bs = (NotElem a bs, NotSubList as bs)
 
-type IndexOf a s = IndexOf' 0 a s
+type IndexOf a s = IndexOf' Z a s
 
-type family IndexOf' (acc :: Nat) (a :: k) (s :: [k]) :: Maybe Nat where
+type family IndexOf' (acc :: N) (a :: k) (s :: [k]) :: Maybe N where
   IndexOf' acc a '[]       = 'Nothing
   IndexOf' acc a (a ': as) = 'Just acc
-  IndexOf' acc a (b ': as) = IndexOf' (acc + 1) a as
+  IndexOf' acc a (b ': as) = IndexOf' (S acc) a as
+
+type family Index (idx :: N) (s :: [k]) :: Maybe k where
+  Index idx     '[]       = 'Nothing
+  Index Z       (a ': as) = 'Just a
+  Index (S idx) (a ': as) = Index idx as
 
 type IsPrefixOf a b = ( If (IsPrefixOfBool a b)
                            (() :: Constraint)
@@ -56,13 +62,13 @@ type family IsPrefixOfBool (a :: [k]) (b :: [k]) :: Bool where
   IsPrefixOfBool (a ': as) (a ': bs) = IsPrefixOfBool as bs
   IsPrefixOfBool as        bs        = 'False
 
-type ElementIsUniq a s = If (Equal 1 (Count a s))
+type ElementIsUniq a s = If (Equal (S Z) (Count a s))
                             (() :: Constraint)
                             (ElementIsNotUniqInList a s)
 
-type family Count (a :: k) (s :: [k]) :: Nat where
-  Count a '[]       = 0
-  Count a (a ': as) = 1 + (Count a as)
+type family Count (a :: k) (s :: [k]) :: N where
+  Count a '[]       = 'Z
+  Count a (a ': as) = 'S (Count a as)
   Count a (b ': as) = Count a as
 
 type UniqElements a = UniqElements' a a

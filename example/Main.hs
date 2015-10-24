@@ -2,6 +2,7 @@ module Main where
 
 import Data.Proxy
 import TypeFun.Data.List
+import TypeFun.Data.Peano
 
 -- | This function has wider constraint __Int is inside l__
 elemConstr :: (Elem Int l) => proxy l -> Int
@@ -19,7 +20,7 @@ prefixConstr p = sublistConstr p + 1
 
 -- | This function has narrower constraint __Int is inside of l and it
 -- is a first argument__ and uses inside more wide function
-indexConstr :: (('Just 0) ~ (IndexOf Int l)) => proxy l -> Int
+indexConstr :: (('Just 'Z) ~ (IndexOf Int l)) => proxy l -> Int
 indexConstr p = elemConstr p + 1
 
 uniqConstr :: (UniqElements l) => proxy l -> Int
