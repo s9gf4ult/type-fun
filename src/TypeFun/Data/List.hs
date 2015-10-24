@@ -1,6 +1,6 @@
 -- | Collection of type families on type lists. This module differs
--- from __Data.Singletons.Prelude.List__ because it polykinded and
--- works with __[*]__ as well
+-- from __Data.Singletons.Prelude.List__ because works with __[*]__
+-- and relies on GHC's type equality (~)
 
 module TypeFun.Data.List where
 
@@ -62,17 +62,30 @@ type family IsPrefixOfBool (a :: [k]) (b :: [k]) :: Bool where
   IsPrefixOfBool (a ': as) (a ': bs) = IsPrefixOfBool as bs
   IsPrefixOfBool as        bs        = 'False
 
+-- | Checks that element 'a' occurs in a list just once
 type ElementIsUniq a s = If (Equal (S Z) (Count a s))
                             (() :: Constraint)
                             (ElementIsNotUniqInList a s)
 
+-- | Count elements in a list
 type family Count (a :: k) (s :: [k]) :: N where
   Count a '[]       = 'Z
   Count a (a ': as) = 'S (Count a as)
   Count a (b ': as) = Count a as
 
+-- | Checks that all elements in list are unique
 type UniqElements a = UniqElements' a a
 
 type family UniqElements' (a :: [k]) (self :: [k]) :: Constraint where
   UniqElements' '[]       self = ()
   UniqElements' (a ': as) self = (ElementIsUniq a self, UniqElements' as self)
+
+type family Drop (c :: N) (s :: [k]) :: [k] where
+  Drop 'Z     s         = s
+  Drop ('S c) '[]       = '[]
+  Drop ('S c) (a ': as) = Drop c as
+
+type family Take (c :: N) (s :: [k]) :: [k] where
+  Take 'Z     s         = '[]
+  Take ('S c) '[]       = '[]
+  Take ('S c) (a ': as) = a ': (Take c as)
