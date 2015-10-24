@@ -20,6 +20,7 @@ library
   hs-source-dirs:      src
   default-extensions:  ConstraintKinds
                      , DataKinds
+                     , DeriveGeneric
                      , FlexibleInstances
                      , MultiParamTypeClasses
                      , PolyKinds
@@ -30,6 +31,7 @@ library
   exposed-modules:     TypeFun.Data.Eq
                      , TypeFun.Data.List
                      , TypeFun.Data.Maybe
+                     , TypeFun.Data.Peano
 
   build-depends:       base >=4.7 && <4.9
 
