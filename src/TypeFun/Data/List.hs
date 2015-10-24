@@ -89,3 +89,8 @@ type family Take (c :: N) (s :: [k]) :: [k] where
   Take 'Z     s         = '[]
   Take ('S c) '[]       = '[]
   Take ('S c) (a ': as) = a ': (Take c as)
+
+type family Delete (a :: k) (s :: [k]) :: [k] where
+  Delete a '[]       = '[]
+  Delete a (a ': as) = Delete a as
+  Delete a (b ': as) = b ': (Delete a as)

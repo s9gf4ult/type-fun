@@ -28,7 +28,8 @@ library
                      , TypeOperators
                      , UndecidableInstances
 
-  exposed-modules:     TypeFun.Data.Eq
+  exposed-modules:     TypeFun.Constraint
+                     , TypeFun.Data.Eq
                      , TypeFun.Data.List
                      , TypeFun.Data.Maybe
                      , TypeFun.Data.Peano
