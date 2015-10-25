@@ -24,6 +24,7 @@ module TypeFun.Data.List
   , IsPrefixOf
   , IsNotPrefixOf
   , IsPrefixOfBool
+    -- * Set operations
   , Union
   , AppendUniq
   , Intersect
@@ -102,7 +103,6 @@ type family Index (idx :: N) (s :: [k]) :: Maybe k where
 type family Indices (idxs :: [N]) (a :: [k]) :: [Maybe k] where
   Indices '[] as = '[]
   Indices (i ': idxs) as = (Index i as) ': (Indices idxs as)
-
 
 -- | Generates unresolvable constraint if fists element is not
 -- contained inside of second
