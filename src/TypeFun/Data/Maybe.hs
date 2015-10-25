@@ -16,3 +16,8 @@ type family NothingToConstr (a :: Maybe k) (c :: Constraint) :: Constraint where
 type family JustToConstr (a :: Maybe k) (c :: Constraint) :: Constraint where
   JustToConstr 'Nothing  c = ()
   JustToConstr ('Just a) c = c
+
+type family CatMaybes (l :: [Maybe k]) :: [k] where
+  CatMaybes '[]               = '[]
+  CatMaybes (('Just a) ': as) = a ': (CatMaybes as)
+  CatMaybes ('Nothing ': as)  = CatMaybes as

@@ -12,7 +12,9 @@ module TypeFun.Data.List
     -- * Elements lookup
   , IndexOf
   , IndexOf'
+  , IndicesOf
   , Index
+  , Indices
   , Elem
   , NotElem
   , Count
@@ -22,6 +24,9 @@ module TypeFun.Data.List
   , IsPrefixOf
   , IsNotPrefixOf
   , IsPrefixOfBool
+  , Union
+  , AppendUniq
+  , Intersect
     -- * Uniqueness checking
   , ElementIsUniq
   , UniqElements
@@ -85,10 +90,18 @@ type family IndexOf' (acc :: N) (a :: k) (s :: [k]) :: Maybe N where
   IndexOf' acc a (a ': as) = 'Just acc
   IndexOf' acc a (b ': as) = IndexOf' (S acc) a as
 
+type family IndicesOf (a :: [k]) (b :: [k]) :: [Maybe N] where
+  IndicesOf '[] bs = '[]
+  IndicesOf (a ': as) bs = (IndexOf a bs) ': (IndicesOf as bs)
+
 type family Index (idx :: N) (s :: [k]) :: Maybe k where
   Index idx     '[]       = 'Nothing
   Index Z       (a ': as) = 'Just a
   Index (S idx) (a ': as) = Index idx as
+
+type family Indices (idxs :: [N]) (a :: [k]) :: [Maybe k] where
+  Indices '[] as = '[]
+  Indices (i ': idxs) as = (Index i as) ': (Indices idxs as)
 
 
 -- | Generates unresolvable constraint if fists element is not
@@ -131,11 +144,26 @@ type family IsPrefixOfBool (a :: [k]) (b :: [k]) :: Bool where
   IsPrefixOfBool (a ': as) (a ': bs) = IsPrefixOfBool as bs
   IsPrefixOfBool as        bs        = 'False
 
+-- | Appends elements from first list to second if they are not
+-- presented in.
+type family Union (a :: [k]) (b :: [k]) :: [k] where
+  Union '[]       bs = bs
+  Union (a ': as) bs = Union as (AppendUniq a bs)
+
+-- | Append element to list if element is not already presented in
+type family AppendUniq (a :: k) (s :: [k]) :: [k] where
+  AppendUniq a (a ': bs) = a ': bs
+  AppendUniq a (b ': bs) = b ': (AppendUniq a bs)
+  AppendUniq a '[]       = '[a]
+
+-- | Calculates intersection between two lists. Order of elements is
+-- taken from first list
+type Intersect a b = (CatMaybes (Indices (CatMaybes (IndicesOf a b)) b))
+
 -- | Checks that element 'a' occurs in a list just once
 type ElementIsUniq a s = If (Equal (S Z) (Count a s))
                             (() :: Constraint)
                             (ElementIsNotUniqInList a s)
-
 
 -- | Checks that all elements in list are unique
 type UniqElements a = UniqElements' a a
