@@ -9,6 +9,7 @@ module TypeFun.Data.List
   , Drop
   , Take
   , Delete
+  , (:++:)
     -- * Elements lookup
   , IndexOf
   , IndexOfMay
@@ -90,6 +91,10 @@ type family Delete (a :: k) (s :: [k]) :: [k] where
   Delete a '[]       = '[]
   Delete a (a ': as) = Delete a as
   Delete a (b ': as) = b ': (Delete a as)
+
+type family (:++:) (a :: [k]) (b :: [k]) :: [k] where
+  '[] :++: b = b
+  (a ': as) :++: b = a ': (as :++: b)
 
 type IndexOf a s = FromJust (IndexOfMay a s)
 
