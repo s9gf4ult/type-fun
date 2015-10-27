@@ -21,3 +21,6 @@ type family CatMaybes (l :: [Maybe k]) :: [k] where
   CatMaybes '[]               = '[]
   CatMaybes (('Just a) ': as) = a ': (CatMaybes as)
   CatMaybes ('Nothing ': as)  = CatMaybes as
+
+type family FromJust (a :: Maybe k) :: k where
+  FromJust ('Just a) = a

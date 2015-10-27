@@ -18,9 +18,10 @@ sublistConstr p = elemConstr p + 1
 prefixConstr :: (IsPrefixOf '[Int, Bool] l) => proxy l -> Int
 prefixConstr p = sublistConstr p + 1
 
--- | This function has narrower constraint __Int is inside of l and it
--- is a first argument__ and uses inside more wide function
-indexConstr :: (('Just 'Z) ~ (IndexOf Int l)) => proxy l -> Int
+-- | This function has narrower constraint
+-- __Int is inside of l and it is a first argument__
+-- and uses inside more wide function
+indexConstr :: (('Just 'Z) ~ (IndexOfMay Int l)) => proxy l -> Int
 indexConstr p = elemConstr p + 1
 
 uniqConstr :: (UniqElements l) => proxy l -> Int
