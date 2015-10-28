@@ -9,6 +9,7 @@ module TypeFun.Data.List
   , Drop
   , Take
   , Delete
+  , Remove
   , (:++:)
     -- * Elements lookup
   , IndexOf
@@ -91,6 +92,12 @@ type family Delete (a :: k) (s :: [k]) :: [k] where
   Delete a '[]       = '[]
   Delete a (a ': as) = Delete a as
   Delete a (b ': as) = b ': (Delete a as)
+
+-- | Remove index from the list
+type family Remove (i :: N) (a :: [k]) :: [k] where
+  Remove i      '[]       = '[]
+  Remove 'Z     (a ': as) = as
+  Remove ('S i) (a ': as) = a ': (Remove i as)
 
 type family (:++:) (a :: [k]) (b :: [k]) :: [k] where
   '[] :++: b = b

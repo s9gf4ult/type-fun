@@ -1,4 +1,10 @@
-module TypeFun.Data.Maybe where
+module TypeFun.Data.Maybe
+  ( MaybeCase
+  , NothingToConstr
+  , JustToConstr
+  , CatMaybes
+  , FromJust
+  ) where
 
 import GHC.Exts
 
@@ -8,7 +14,6 @@ type family MaybeCase (a :: Maybe k)
   MaybeCase 'Nothing nothing just  = nothing
   MaybeCase ('Just k) nothing just = just k
 
-
 type family NothingToConstr (a :: Maybe k) (c :: Constraint) :: Constraint where
   NothingToConstr 'Nothing  c = c
   NothingToConstr ('Just a) c = ()
@@ -17,6 +22,7 @@ type family JustToConstr (a :: Maybe k) (c :: Constraint) :: Constraint where
   JustToConstr 'Nothing  c = ()
   JustToConstr ('Just a) c = c
 
+-- | Like 'catMaybes' for type lists
 type family CatMaybes (l :: [Maybe k]) :: [k] where
   CatMaybes '[]               = '[]
   CatMaybes (('Just a) ': as) = a ': (CatMaybes as)

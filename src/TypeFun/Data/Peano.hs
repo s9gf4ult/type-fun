@@ -1,4 +1,11 @@
-module TypeFun.Data.Peano where
+module TypeFun.Data.Peano
+  ( N(..)
+  , ToNat
+  , FromNat
+  , (:+:)
+  , (:-:)
+  , (:*:)
+  ) where
 
 import Data.Typeable
 import GHC.Generics (Generic)
