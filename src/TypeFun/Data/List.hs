@@ -35,6 +35,7 @@ module TypeFun.Data.List
   , UnionList
   , AppendUniq
   , Intersect
+  , Substract
     -- * Uniqueness checking
   , ElementIsUniq
   , UniqElements
@@ -194,6 +195,12 @@ type family AppendUniq (a :: k) (s :: [k]) :: [k] where
 -- | Calculates intersection between two lists. Order of elements is
 -- taken from first list
 type Intersect a b = (Indices (CatMaybes (IndicesOfMay a b)) b)
+
+-- | Removes from first list all elements occured in second
+type family Substract (a :: [k]) (b :: [k]) :: [k] where
+  Substract '[] b = '[]
+  Substract a '[] = a
+  Substract a (b ': bs) = Substract (Delete b a) bs
 
 -- | Checks that element 'a' occurs in a list just once
 type ElementIsUniq a s = If (Equal (S Z) (Count a s))
