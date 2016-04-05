@@ -23,6 +23,8 @@ library
                      , FlexibleInstances
                      , MultiParamTypeClasses
                      , PolyKinds
+                     , RankNTypes
+                     , ScopedTypeVariables
                      , TypeFamilies
                      , TypeOperators
                      , UndecidableInstances

@@ -40,6 +40,9 @@ module TypeFun.Data.List
   , ElementIsUniq
   , UniqElements
   , UniqElements'
+    -- * Helpers
+  , appendId
+  , subListId
   ) where
 
 import Data.Type.Bool
@@ -48,6 +51,7 @@ import GHC.TypeLits
 import TypeFun.Data.Eq
 import TypeFun.Data.Maybe
 import TypeFun.Data.Peano
+import Unsafe.Coerce
 
 ------------------------------------------------------------------------
 -- NOTE: Errors type classes. These type classes are not in separate  --
@@ -104,6 +108,13 @@ type family (:++:) (a :: [k]) (b :: [k]) :: [k] where
   '[] :++: b = b
   (a ': as) :++: b = a ': (as :++: b)
 
+appendId
+  :: forall proxy l r
+   . proxy l
+  -> (l ~ (l :++: '[]) => r)
+  -> r
+appendId = unsafeCoerce id
+
 type IndexOf a s = FromJust (IndexOfMay a s)
 
 type IndexOfMay a s = IndexOfMay' Z a s
@@ -156,6 +167,12 @@ type family Count (a :: k) (s :: [k]) :: N where
 type family SubList (a :: [k]) (b :: [k]) :: Constraint where
   SubList '[]       bs = ()
   SubList (a ': as) bs = (Elem a bs, SubList as bs)
+
+subListId
+  :: forall proxy l r
+   . proxy l
+  -> (SubList l l => r) -> r
+subListId _ = unsafeCoerce id
 
 type family NotSubList (a :: [k]) (b :: [k]) :: Constraint where
   NotSubList '[]       bs = ()
