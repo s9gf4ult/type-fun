@@ -40,7 +40,7 @@ module TypeFun.Data.List
   , ElementIsUniq
   , UniqElements
   , UniqElements'
-    -- * Helpers
+    -- * Unsafe helpers
   , appendId
   , subListId
   ) where
