@@ -1,5 +1,5 @@
 name:                type-fun
-version:             0.1.0
+version:             0.1.1
 synopsis:            Collection of widely reimplemented type families
 license:             BSD3
 license-file:        LICENSE
@@ -36,7 +36,7 @@ library
                      , TypeFun.Data.Maybe
                      , TypeFun.Data.Peano
 
-  build-depends:       base >=4.7 && <4.9
+  build-depends:       base >= 4.7 && < 5
 
 test-suite example
   type:               exitcode-stdio-1.0

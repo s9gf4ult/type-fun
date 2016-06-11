@@ -4,6 +4,10 @@
 
 # CHANGELOG
 
+## 0.1.1
+### Fixed
+* Compilable with ghc-8.0.1
+
 ## 0.1.0
 ### Added
 * Type family `Substract` to remove elements of one list from another
