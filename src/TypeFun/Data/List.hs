@@ -162,7 +162,7 @@ type family Count (a :: k) (s :: [k]) :: N where
   Count a (a ': as) = 'S (Count a as)
   Count a (b ': as) = Count a as
 
--- | Constanints that first argument is a sublist of second. Reduces
+-- | Constrains that first argument is a sublist of second. Reduces
 -- to __(Elem a1 b, Elem a2 b, Elem a3 b, ...)__
 type family SubList (a :: [k]) (b :: [k]) :: Constraint where
   SubList '[]       bs = ()
