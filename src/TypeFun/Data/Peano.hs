@@ -1,5 +1,6 @@
 module TypeFun.Data.Peano
   ( N(..)
+  , KnownPeano(..)
   , ToNat
   , FromNat
   , (:+:)
@@ -7,9 +8,9 @@ module TypeFun.Data.Peano
   , (:*:)
   ) where
 
-import Data.Typeable
-import GHC.Generics (Generic)
-import GHC.TypeLits
+import           Data.Typeable
+import           GHC.Generics  (Generic)
+import           GHC.TypeLits
 
 data N = Z | S N
          deriving ( Eq, Ord, Read, Show
