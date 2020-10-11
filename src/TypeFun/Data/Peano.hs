@@ -1,5 +1,6 @@
 module TypeFun.Data.Peano
   ( N(..)
+  , KnownPeano(..)
   , ToNat
   , FromNat
   , (:+:)
@@ -7,13 +8,23 @@ module TypeFun.Data.Peano
   , (:*:)
   ) where
 
-import Data.Typeable
-import GHC.Generics (Generic)
-import GHC.TypeLits
+import           Data.Typeable
+import           GHC.Generics  (Generic)
+import           GHC.TypeLits
 
 data N = Z | S N
          deriving ( Eq, Ord, Read, Show
                   , Generic, Typeable )
+
+-- | @since 0.1.2
+class KnownPeano (p :: N) where
+  peanoVal :: proxy p -> Integer
+
+instance KnownPeano Z where
+  peanoVal _ = 0
+
+instance (KnownPeano n) => KnownPeano (S n) where
+  peanoVal _ = succ $ peanoVal (Proxy :: Proxy n)
 
 type family ToNat (a :: N) :: Nat where
   ToNat Z = 0

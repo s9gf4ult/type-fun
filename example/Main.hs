@@ -37,4 +37,5 @@ main = do
   print $ prefixConstr p2
   print $ prefixConstr p3
   print $ uniqConstr p2
+  print $ peanoVal (Proxy :: Proxy (FromNat 100))
   -- print $ uniqConstr p3 -- < ElementIsNotUniqInList Int '[Int, Bool, Int]
