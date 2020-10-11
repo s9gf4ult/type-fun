@@ -15,6 +15,15 @@ data N = Z | S N
          deriving ( Eq, Ord, Read, Show
                   , Generic, Typeable )
 
+class KnownPeano (p :: N) where
+  peanoVal :: proxy p -> Integer
+
+instance KnownPeano Z where
+  peanoVal _ = 0
+
+instance (KnownPeano n) => KnownPeano (S n) where
+  peanoVal _ = succ $ peanoVal (Proxy :: Proxy n)
+
 type family ToNat (a :: N) :: Nat where
   ToNat Z = 0
   ToNat (S a) = 1 + (ToNat a)
