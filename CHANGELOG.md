@@ -4,6 +4,9 @@
 
 # CHANGELOG
 
+## 0.1.2
+### Added KnownPeano
+
 ## 0.1.1
 ### Fixed
 * Compilable with ghc-8.0.1
