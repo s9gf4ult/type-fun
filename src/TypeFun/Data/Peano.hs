@@ -16,6 +16,7 @@ data N = Z | S N
          deriving ( Eq, Ord, Read, Show
                   , Generic, Typeable )
 
+-- | @since 0.1.2
 class KnownPeano (p :: N) where
   peanoVal :: proxy p -> Integer
 
