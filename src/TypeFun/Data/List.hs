@@ -3,6 +3,8 @@
 -- and relies on GHC's type equality (~). The rest of required
 -- operations like 'Reverse' or '(:++:)' you could find in singletons
 
+{-# LANGUAGE GADTs #-}
+
 module TypeFun.Data.List
   ( -- * Primitive operations on lists
     Length
@@ -108,12 +110,16 @@ type family (:++:) (a :: [k]) (b :: [k]) :: [k] where
   '[] :++: b = b
   (a ': as) :++: b = a ': (as :++: b)
 
+data Dict c where Dict :: c => Dict c
+
 appendId
   :: forall proxy l r
    . proxy l
   -> (l ~ (l :++: '[]) => r)
   -> r
-appendId = unsafeCoerce id
+appendId _ r = case obvious of Dict -> r
+  where obvious :: Dict (l ~ (l :++: '[]))
+        obvious = unsafeCoerce (Dict :: Dict (l ~ l))
 
 type IndexOf a s = FromJust (IndexOfMay a s)
 
@@ -172,7 +178,9 @@ subListId
   :: forall proxy l r
    . proxy l
   -> (SubList l l => r) -> r
-subListId _ = unsafeCoerce id
+subListId _ r = case obvious of Dict -> r
+  where obvious :: Dict (SubList l l)
+        obvious = unsafeCoerce (Dict :: Dict ())
 
 type family NotSubList (a :: [k]) (b :: [k]) :: Constraint where
   NotSubList '[]       bs = ()
