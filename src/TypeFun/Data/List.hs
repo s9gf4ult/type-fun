@@ -45,13 +45,13 @@ module TypeFun.Data.List
   , subListId
   ) where
 
-import Data.Type.Bool
-import GHC.Exts
-import GHC.TypeLits
-import TypeFun.Data.Eq
-import TypeFun.Data.Maybe
-import TypeFun.Data.Peano
-import Unsafe.Coerce
+import           Data.Type.Bool
+import           GHC.Exts
+import           GHC.TypeLits
+import           TypeFun.Data.Eq
+import           TypeFun.Data.Maybe
+import           TypeFun.Data.Peano
+import           Unsafe.Coerce
 
 ------------------------------------------------------------------------
 -- NOTE: Errors type classes. These type classes are not in separate  --
@@ -108,12 +108,16 @@ type family (:++:) (a :: [k]) (b :: [k]) :: [k] where
   '[] :++: b = b
   (a ': as) :++: b = a ': (as :++: b)
 
+data Dict c where Dict :: c => Dict c
+
 appendId
   :: forall proxy l r
    . proxy l
   -> (l ~ (l :++: '[]) => r)
   -> r
-appendId = unsafeCoerce id
+appendId _ r = case obvious of Dict -> r
+  where obvious :: Dict (l ~ (l :++: '[]))
+        obvious = unsafeCoerce (Dict :: Dict (l ~ l))
 
 type IndexOf a s = FromJust (IndexOfMay a s)
 
@@ -162,7 +166,7 @@ type family Count (a :: k) (s :: [k]) :: N where
   Count a (a ': as) = 'S (Count a as)
   Count a (b ': as) = Count a as
 
--- | Constanints that first argument is a sublist of second. Reduces
+-- | Constrains that first argument is a sublist of second. Reduces
 -- to __(Elem a1 b, Elem a2 b, Elem a3 b, ...)__
 type family SubList (a :: [k]) (b :: [k]) :: Constraint where
   SubList '[]       bs = ()
@@ -172,7 +176,9 @@ subListId
   :: forall proxy l r
    . proxy l
   -> (SubList l l => r) -> r
-subListId _ = unsafeCoerce id
+subListId _ r = case obvious of Dict -> r
+  where obvious :: Dict (SubList l l)
+        obvious = unsafeCoerce (Dict :: Dict ())
 
 type family NotSubList (a :: [k]) (b :: [k]) :: Constraint where
   NotSubList '[]       bs = ()
