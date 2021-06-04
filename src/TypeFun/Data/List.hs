@@ -3,8 +3,6 @@
 -- and relies on GHC's type equality (~). The rest of required
 -- operations like 'Reverse' or '(:++:)' you could find in singletons
 
-{-# LANGUAGE GADTs #-}
-
 module TypeFun.Data.List
   ( -- * Primitive operations on lists
     Length
@@ -47,13 +45,13 @@ module TypeFun.Data.List
   , subListId
   ) where
 
-import Data.Type.Bool
-import GHC.Exts
-import GHC.TypeLits
-import TypeFun.Data.Eq
-import TypeFun.Data.Maybe
-import TypeFun.Data.Peano
-import Unsafe.Coerce
+import           Data.Type.Bool
+import           GHC.Exts
+import           GHC.TypeLits
+import           TypeFun.Data.Eq
+import           TypeFun.Data.Maybe
+import           TypeFun.Data.Peano
+import           Unsafe.Coerce
 
 ------------------------------------------------------------------------
 -- NOTE: Errors type classes. These type classes are not in separate  --
