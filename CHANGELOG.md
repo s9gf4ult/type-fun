@@ -4,6 +4,10 @@
 
 # CHANGELOG
 
+## 0.1.3
+### Fixed
+* Buildability with GHC-8.10 (by enobayram)
+
 ## 0.1.2
 ### Added KnownPeano
 
